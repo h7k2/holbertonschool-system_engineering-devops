@@ -1,0 +1,20 @@
+User (Browser)
+   |
+   | 1) DNS query: www.foobar.com
+   v
+DNS (resolves www -> 8.8.8.8)
+   |
+   | 2) HTTP/HTTPS request to 8.8.8.8
+   v
+Single Server (8.8.8.8)
++------------------------------------------------------+
+| Nginx (Web Server / Reverse Proxy)                   |
+|   -> forwards dynamic requests to Application Server  |
+|                                                      |
+| Application Server (runs the app code)                |
+|   -> reads/writes data in MySQL                       |
+|                                                      |
+| Application Files (codebase)                          |
+|                                                      |
+| MySQL (Database)                                      |
++------------------------------------------------------+
