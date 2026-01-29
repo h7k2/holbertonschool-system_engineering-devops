@@ -1,0 +1,37 @@
+User (Browser)
+  |
+  | DNS: www.foobar.com -> Load Balancer VIP (public IP)
+  v
++---------------------------+
+| LB Cluster (HAProxy x2)   |
+| - LB1 (active)            |
+| - LB2 (standby or active) |
+| (VIP via keepalived/VRRP) |
++---------------------------+
+        |               |
+        | forwards HTTP/HTTPS requests
+        v               v
++-------------------+   +-------------------+
+| Web Server 1      |   | Web Server 2      |
+| Nginx             |   | Nginx             |
++-------------------+   +-------------------+
+        |               |
+        | reverse proxy to app tier
+        v               v
++-------------------+   +-------------------+
+| App Server 1      |   | App Server 2      |
+| Application       |   | Application       |
++-------------------+   +-------------------+
+            |
+            | SQL queries
+            v
++---------------------------+
+| Database Server           |
+| MySQL (Primary)           |
++---------------------------+
+            |
+            | replication (optional)
+            v
++---------------------------+
+| MySQL Replica (optional)  |
++---------------------------+
