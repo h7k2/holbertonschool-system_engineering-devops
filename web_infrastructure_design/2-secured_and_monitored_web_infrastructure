@@ -1,0 +1,32 @@
+User (Browser)
+  |
+  | 1) DNS: www.foobar.com -> Load Balancer public IP
+  v
+[Firewall #1]
+  |
+  | 2) HTTPS (TLS)
+  v
+Load Balancer (HAProxy) + SSL certificate (terminates TLS)
+  |
+  | 3) Forward HTTP to backends (or re-encrypt HTTPS internally)
+  |-----------------------------|
+  v                             v
+[Firewall #2]                   [Firewall #3]
+  |                               |
+Server A                          Server B
++---------------------+           +---------------------+
+| Nginx (Web Server)  |           | Nginx (Web Server)  |
+| App Server          |           | App Server          |
+| Application Files   |           | Application Files   |
+| MySQL (Primary)     |           | MySQL (Replica)     |
+| Monitoring agent    |           | Monitoring agent    |
++---------------------+           +---------------------+
+            |
+            | Replication (Primary -> Replica)
+            v
+        (binlog sync)
+
+Monitoring System (Sumo Logic / other)
+   ^                 ^
+   | logs/metrics    | logs/metrics
+   +---- agent A ----+---- agent B ----+---- agent LB ----
