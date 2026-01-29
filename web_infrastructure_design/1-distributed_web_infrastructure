@@ -1,0 +1,19 @@
+User (Browser)
+  |
+  | 1) DNS resolves www.foobar.com -> LB public IP
+  v
+Load Balancer (HAProxy)
+  | 2) Distributes HTTP/HTTPS requests
+  |-----------------------------|
+  v                             v
+Server A                        Server B
++---------------------+         +---------------------+
+| Nginx (Web Server)  |         | Nginx (Web Server)  |
+| App Server          |         | App Server          |
+| Application Files   |         | Application Files   |
+| MySQL (Primary)     |         | MySQL (Replica)     |
++---------------------+         +---------------------+
+           |
+           | 3) Replication (binlog) Primary -> Replica
+           v
+      MySQL Replica sync
